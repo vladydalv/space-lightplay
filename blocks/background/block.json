@@ -1,0 +1,182 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "space-lightplay/background",
+	"version": "2.0.0",
+	"title": "Space Lightplay Background",
+	"category": "media",
+	"icon": "format-video",
+	"description": "YouTube, Vimeo or self-hosted video as a background, with any blocks on top. Loads only when in view.",
+	"textdomain": "space-lightplay",
+	"keywords": [
+		"background",
+		"video",
+		"cover",
+		"hero",
+		"youtube",
+		"vimeo"
+	],
+	"attributes": {
+		"source": {
+			"type": "string",
+			"enum": [
+				"youtube",
+				"vimeo",
+				"file"
+			],
+			"default": "youtube"
+		},
+		"videoUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"videoId": {
+			"type": "string",
+			"default": ""
+		},
+		"vimeoHash": {
+			"type": "string",
+			"default": ""
+		},
+		"fileId": {
+			"type": "number",
+			"default": 0
+		},
+		"fileUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"videoTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"videoRatio": {
+			"type": "string",
+			"default": ""
+		},
+		"duration": {
+			"type": "number",
+			"default": 0
+		},
+		"startAt": {
+			"type": "number",
+			"default": 0
+		},
+		"endAt": {
+			"type": "number",
+			"default": 0
+		},
+		"preview": {
+			"type": "string",
+			"default": ""
+		},
+		"previewId": {
+			"type": "number",
+			"default": 0
+		},
+		"previewAuto": {
+			"type": "boolean",
+			"default": false
+		},
+		"alt": {
+			"type": "string",
+			"default": ""
+		},
+		"priorityLoad": {
+			"type": "boolean",
+			"default": false
+		},
+		"consent": {
+			"type": "boolean",
+			"default": false
+		},
+		"consentRemember": {
+			"type": "boolean",
+			"default": true
+		},
+		"consentText": {
+			"type": "string",
+			"default": ""
+		},
+		"panelBg": {
+			"type": "string",
+			"default": ""
+		},
+		"panelText": {
+			"type": "string",
+			"default": ""
+		},
+		"playerBg": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayColor": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayGradient": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayOpacity": {
+			"type": "number",
+			"default": 50
+		},
+		"stash": {
+			"type": "object",
+			"default": {}
+		},
+		"playOnMobile": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": true,
+		"shadow": true,
+		"color": {
+			"text": true,
+			"link": true,
+			"background": false,
+			"__experimentalDefaultControls": {
+				"text": true
+			}
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": true
+		},
+		"dimensions": {
+			"aspectRatio": true,
+			"minHeight": true,
+			"width": true
+		},
+		"__experimentalBorder": {
+			"radius": true,
+			"color": true,
+			"width": true,
+			"style": true,
+			"__experimentalDefaultControls": {
+				"radius": true
+			}
+		},
+		"layout": {
+			"default": {
+				"type": "flex",
+				"orientation": "vertical",
+				"justifyContent": "center",
+				"verticalAlignment": "center"
+			},
+			"allowSwitching": false,
+			"allowOrientation": false
+		}
+	},
+	"editorScript": "space-lightplay-editor",
+	"editorStyle": "space-lightplay-editor-style",
+	"viewScript": "space-lightplay-view",
+	"style": "space-lightplay-style",
+	"render": "file:./render.php"
+}

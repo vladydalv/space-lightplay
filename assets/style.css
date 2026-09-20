@@ -1,0 +1,443 @@
+/* Space Lightplay — shared styles (frontend + editor).
+   Every visual value comes from a --slp-* variable set by the block. */
+
+/* Colour defaults. Blocks only set the colours the user picked (inline on .slp-stage). */
+.space-lightplay,
+.slp-bg,
+.slp-lightbox {
+	--slp-btn-bg: #0000008c;
+	--slp-btn-bg-hover: #000000b3;
+	--slp-icon: #fff;
+	--slp-icon-hover: #fff;
+	--slp-panel-bg: #000000c7;
+	--slp-panel-text: #fff;
+	--slp-lightbox-backdrop: #000000e0;
+	--slp-player-bg: #000;
+	--slp-overlay: #000;
+	--slp-overlay-opacity: .3;
+}
+
+/* Zero specificity: removes the UA figure margin but lets WordPress layout
+   rules (alignleft/right/center gaps) and block spacing apply as for core blocks. */
+:where(.space-lightplay) {
+	margin: 0;
+}
+
+.space-lightplay {
+	position: relative;
+	display: grid;
+	grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+	box-sizing: border-box;
+	aspect-ratio: var(--slp-ratio, 16 / 9);
+	overflow: hidden;
+}
+/* Core's "Original" aspect ratio (inline `aspect-ratio: auto`) would give these blocks no
+   height at all — their layers are positioned — so it means the video's own ratio here. */
+.space-lightplay.slp-ratio-auto,
+.slp-bg.slp-ratio-auto {
+	aspect-ratio: var(--slp-ratio, 16 / 9) !important;
+}
+
+/* Width: the native Width control (inline style) always wins over these. */
+.space-lightplay:where(:not(.alignwide):not(.alignfull)) {
+	width: 100%;
+	max-width: 100%;
+}
+/* Floated without a width would collapse or span the column — same default as core/embed. */
+.space-lightplay.alignleft,
+.space-lightplay.alignright {
+	width: min(100%, 360px);
+}
+.space-lightplay.aligncenter {
+	margin-inline: auto;
+}
+
+.slp-stage {
+	position: relative;
+	background: var(--slp-player-bg, #000);
+	min-height: 0;
+	overflow: hidden;
+	/* No own radius: the block (overflow: hidden) clips this layer along the inner edge
+	   of its border, which is the correct, smaller radius. Inheriting the outer radius
+	   left gaps between border and video. */
+	container-type: inline-size;
+}
+
+.slp-media,
+.slp-frame {
+	position: absolute;
+	inset: 0;
+}
+.slp-media { z-index: 1; }
+.slp-frame { z-index: 2; opacity: 0; transition: opacity .35s ease; }
+
+.slp-poster {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: opacity .35s ease;
+}
+/* Hover overlay: colour or gradient + opacity, like the core Cover block's overlay. */
+.slp-media::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: var(--slp-overlay);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .25s ease;
+}
+.space-lightplay:not(.is-playing):not(.slp-mode-background):is(:hover, :focus-within) .slp-media::after {
+	opacity: var(--slp-overlay-opacity);
+}
+
+.slp-frame iframe,
+.slp-frame video {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+/* ── Play button ──
+   Covers the whole block, so theme button styles (button:hover etc.) must never
+   reach it — same protection as 1.x. */
+.space-lightplay .slp-play,
+.space-lightplay .slp-play:hover,
+.space-lightplay .slp-play:focus,
+.space-lightplay .slp-play:active {
+	background: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	color: inherit;
+	text-decoration: none;
+}
+.slp-play {
+	position: absolute;
+	inset: 0;
+	z-index: 4;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: none;
+	box-shadow: none;
+	cursor: pointer;
+	appearance: none;
+	transition: opacity .3s ease, visibility .3s;
+}
+.slp-play:focus { outline: none; }
+.slp-play:focus-visible .slp-play__icon {
+	outline: 2px solid var(--slp-icon);
+	outline-offset: 3px;
+}
+
+.slp-play__icon {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	box-sizing: border-box;
+	width: var(--slp-btn-size, 80px);
+	height: var(--slp-btn-size, 80px);
+	aspect-ratio: 1;
+	border-radius: var(--slp-btn-radius, 50%);
+	background: var(--slp-btn-bg);
+	color: var(--slp-icon);
+	-webkit-backdrop-filter: blur(var(--slp-btn-blur, 0px));
+	backdrop-filter: blur(var(--slp-btn-blur, 0px));
+	transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+.slp-play:hover .slp-play__icon,
+.slp-play:focus-visible .slp-play__icon {
+	background: var(--slp-btn-bg-hover);
+	color: var(--slp-icon-hover);
+}
+
+/* Stroke grows the polygon (~0.32% per unit); shrink the svg to keep the visible size. */
+.slp-play__icon svg {
+	display: block;
+	width: calc(38% - var(--slp-icon-corner, 0) * .32%);
+	height: calc(38% - var(--slp-icon-corner, 0) * .32%);
+	margin-left: 6%;
+	overflow: visible;
+	transition: opacity .2s ease;
+}
+[dir="rtl"] .slp-play__icon svg {
+	margin-left: 0;
+	margin-right: 6%;
+	transform: scaleX(-1);
+}
+.slp-play__icon polygon {
+	fill: currentColor;
+	stroke: currentColor;
+	stroke-width: var(--slp-icon-corner, 0);
+	stroke-linejoin: round;
+	paint-order: stroke fill;
+}
+
+/* Pulse ring uses the button colour — no fixed colour. */
+.has-pulse .slp-play:hover .slp-play__icon::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	border-radius: inherit;
+	background: var(--slp-btn-bg-hover);
+	animation: slp-pulse 1.2s ease-out infinite;
+}
+@keyframes slp-pulse {
+	from { transform: scale(1); opacity: .7; }
+	to   { transform: scale(1.6); opacity: 0; }
+}
+
+/* Loading: triangle becomes a spinner in the icon colour. */
+.is-loading .slp-play__icon svg { opacity: 0; }
+.is-loading .slp-play__icon::before {
+	content: "";
+	position: absolute;
+	width: 36%;
+	height: 36%;
+	border: 3px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: slp-spin .8s linear infinite;
+}
+@keyframes slp-spin { to { transform: rotate(360deg); } }
+
+.is-playing .slp-frame { opacity: 1; }
+.is-playing .slp-play,
+.is-playing .slp-media {
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+}
+.is-playing .slp-poster { opacity: 0; }
+
+/* ── Small controls: background pause, unmute, lightbox close ── */
+:is(.space-lightplay, .slp-bg, .slp-lightbox) .slp-ctrl,
+:is(.space-lightplay, .slp-bg, .slp-lightbox) .slp-ctrl:hover,
+:is(.space-lightplay, .slp-bg, .slp-lightbox) .slp-ctrl:active {
+	position: absolute;
+	justify-content: center;
+	box-sizing: border-box;
+	right: .75rem;
+	bottom: .75rem;
+	z-index: 6;
+	display: inline-flex;
+	align-items: center;
+	gap: .5em;
+	min-height: 2.5rem;
+	min-width: 2.5rem;
+	padding: .5rem;
+	margin: 0;
+	border: 0;
+	border-radius: 999px;
+	background: var(--slp-panel-bg);
+	color: var(--slp-panel-text);
+	font: inherit;
+	font-size: .875rem;
+	line-height: 1;
+	cursor: pointer;
+	-webkit-backdrop-filter: blur(var(--slp-btn-blur, 0px));
+	backdrop-filter: blur(var(--slp-btn-blur, 0px));
+}
+:is(.space-lightplay, .slp-bg, .slp-lightbox) .slp-ctrl:has(span) { padding-inline: .875rem 1rem; }
+.slp-ctrl svg {
+	width: 1.25rem;
+	height: 1.25rem;
+	fill: currentColor;
+	flex-shrink: 0;
+}
+.slp-ctrl:focus-visible {
+	outline: 2px solid var(--slp-panel-text);
+	outline-offset: 2px;
+}
+:is(.space-lightplay, .slp-bg, .slp-lightbox) .slp-ctrl[hidden] { display: none; }
+
+/* ── Consent gate ── */
+.slp-consent {
+	position: absolute;
+	inset: 0;
+	z-index: 7;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 1.5rem;
+	box-sizing: border-box;
+	text-align: center;
+	background: var(--slp-panel-bg);
+	color: var(--slp-panel-text);
+	-webkit-backdrop-filter: blur(var(--slp-btn-blur, 0px));
+	backdrop-filter: blur(var(--slp-btn-blur, 0px));
+}
+.slp-consent[hidden] { display: none; }
+.is-consent .slp-play {
+	visibility: hidden;
+}
+.slp-consent__text {
+	max-width: 44ch;
+	margin: 0;
+	font-size: clamp(.8125rem, 2.4cqi, 1rem);
+	line-height: 1.5;
+}
+.slp-consent__text a { color: inherit; }
+.slp-consent__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: .75rem 1.25rem;
+}
+.slp-consent__remember {
+	display: inline-flex;
+	align-items: center;
+	gap: .5em;
+	font-size: .8125rem;
+	cursor: pointer;
+}
+.slp-consent__remember input { accent-color: currentColor; margin: 0; }
+
+:is(.space-lightplay, .slp-bg) .slp-consent__accept,
+.space-lightplay .slp-replay {
+	display: inline-flex;
+	align-items: center;
+	gap: .5em;
+	padding: .625rem 1.125rem;
+	margin: 0;
+	border: 1px solid currentColor;
+	border-radius: 999px;
+	background: color-mix(in srgb, currentColor 14%, transparent);
+	color: inherit;
+	font: inherit;
+	font-size: .9375rem;
+	line-height: 1.2;
+	cursor: pointer;
+	transition: background-color .2s ease;
+}
+:is(.space-lightplay, .slp-bg) .slp-consent__accept:hover,
+.space-lightplay .slp-replay:hover { background: color-mix(in srgb, currentColor 26%, transparent); }
+.slp-consent__accept:focus-visible,
+.slp-replay:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.slp-replay svg { width: 1.125rem; height: 1.125rem; fill: currentColor; }
+
+/* ── End screen (child block) ── */
+.slp-end {
+	position: absolute;
+	inset: 0;
+	z-index: 8;
+	box-sizing: border-box;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .35s ease, visibility .35s;
+}
+.is-ended .slp-end {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* ── Background mode: cover-fit the player, no interaction ── */
+.slp-mode-background .slp-frame {
+	container-type: size;
+	pointer-events: none;
+	overflow: hidden;
+}
+.slp-mode-background .slp-frame iframe {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: max(100cqw, calc(100cqh * var(--slp-video-ratio, 16 / 9)));
+	height: max(100cqh, calc(100cqw / (var(--slp-video-ratio, 16 / 9))));
+	transform: translate(-50%, -50%);
+}
+.slp-mode-background .slp-frame video { object-fit: cover; }
+
+/* ── Lightbox ── */
+.slp-lightbox {
+	width: min(var(--slp-lightbox-width, 1200px), 92vw, calc(86vh * var(--slp-video-ratio, 16 / 9)));
+	max-width: none;
+	max-height: none;
+	padding: 0;
+	margin: auto;
+	border: 0;
+	background: transparent;
+	overflow: visible;
+}
+.slp-lightbox::backdrop { background: var(--slp-lightbox-backdrop); }
+.slp-lightbox .slp-frame {
+	position: relative;
+	inset: auto;
+	aspect-ratio: var(--slp-video-ratio, 16 / 9);
+	opacity: 1;
+}
+.slp-lightbox .slp-ctrl {
+	top: auto;
+	right: 0;
+	bottom: calc(100% + .5rem);
+}
+@media (prefers-reduced-motion: no-preference) {
+	.slp-lightbox[open] { animation: slp-zoom .25s ease-out; }
+	.slp-lightbox[open]::backdrop { animation: slp-fade .25s ease-out; }
+}
+@keyframes slp-zoom { from { opacity: 0; transform: scale(.96); } }
+@keyframes slp-fade { from { opacity: 0; } }
+
+.slp-noscript {
+	position: absolute;
+	left: 1rem;
+	bottom: 1rem;
+	z-index: 9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.slp-frame,
+	.slp-poster,
+	.slp-media::after,
+	.slp-play,
+	.slp-play__icon,
+	.slp-end { transition: none; }
+	.has-pulse .slp-play:hover .slp-play__icon::after { animation: none; }
+	.is-loading .slp-play__icon::before { animation-duration: 2.4s; }
+}
+
+/* ── Background block: video behind any blocks (like core/cover) ── */
+.slp-bg {
+	position: relative;
+	box-sizing: border-box;
+	overflow: hidden;
+	aspect-ratio: var(--slp-ratio, 16 / 9);
+	--slp-overlay-opacity: .5;
+}
+.slp-bg:not(.has-text-color) {
+	color: #fff;
+}
+.slp-bg > .slp-stage {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	container-type: size;
+}
+.slp-bg__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	background: var(--slp-overlay);
+	opacity: var(--slp-overlay-opacity);
+	pointer-events: none;
+}
+/* Content sits above the video; layout (flex) comes from the block's native layout support. */
+.slp-bg > :not(.slp-stage):not(.slp-ctrl):not(.slp-consent):not(noscript) {
+	position: relative;
+	z-index: 1;
+}
+.slp-bg > .slp-consent {
+	z-index: 7;
+}

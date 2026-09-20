@@ -1,0 +1,114 @@
+/* Space Lightplay — editor only. Visuals come from style.css; this file only
+   adapts the end-screen layer for editing and styles the source form. */
+
+.slp-empty {
+	margin: 0;
+}
+.slp-source-form {
+	width: 100%;
+	max-width: 560px;
+}
+.slp-source-form__field {
+	flex: 1;
+	min-width: 0;
+}
+.slp-replace-popover__inner {
+	box-sizing: border-box;
+	width: min(400px, 90vw);
+	padding: 16px;
+}
+
+/* Child container: is click-through so the video block stays selectable. */
+.space-lightplay.is-editor .slp-layers {
+	position: absolute;
+	inset: 0;
+	z-index: 5;
+	pointer-events: none;
+}
+.space-lightplay.is-editor .slp-layers > .slp-end {
+	position: absolute; /* the editor gives every block position: relative */
+	inset: 0;
+	margin: 0;
+}
+.space-lightplay.is-editor .slp-end.is-active {
+	pointer-events: auto;
+}
+.space-lightplay.is-editor .slp-end.is-active {
+	opacity: 1;
+	visibility: visible;
+}
+.space-lightplay.is-editor .slp-play {
+	pointer-events: none;
+	cursor: default;
+}
+/* The icon itself reacts to hover, so hover colours and the pulse can be previewed.
+   It is a plain span: a click still just selects the block. */
+.space-lightplay.is-editor .slp-play__icon {
+	pointer-events: auto;
+}
+.space-lightplay.is-editor .slp-replay {
+	cursor: default;
+}
+
+.slp-poster--empty {
+	background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.slp-busy {
+	position: absolute;
+	inset: 0;
+	z-index: 9;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: color-mix(in srgb, var(--slp-panel-bg) 60%, transparent);
+}
+
+.slp-help.slp-help {
+	margin: 0;
+}
+
+.slp-source-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+.slp-source-info__target {
+	overflow-wrap: anywhere;
+	font-size: 12px;
+}
+
+/* Status/action rows inside ToolsPanel span the full grid width. */
+.slp-panel-row {
+	grid-column: 1 / -1;
+}
+.slp-end-row {
+	padding-top: 8px;
+}
+
+/* Paired fields side by side, as core does in its own panels. */
+.slp-tools-panel .single-column {
+	grid-column: span 1;
+}
+
+/* Background block: the video layer never takes clicks, so the block and its content stay editable. */
+.slp-bg.is-editor > .slp-stage {
+	pointer-events: none;
+}
+.slp-bg.is-editor > .slp-busy {
+	position: absolute;
+	inset: 0;
+	z-index: 9;
+}
+
+/* Selection/hover outline (core draws it on ::after) follows the block's inner rounded edge. */
+/* !important: some WordPress versions set their own small radius on this outline with a
+   more specific selector; for these blocks the outline must follow the block's shape. */
+.space-lightplay.is-editor::after,
+.slp-bg.is-editor::after {
+	border-top-left-radius: var(--slp-r-tl, 0) !important;
+	border-top-right-radius: var(--slp-r-tr, 0) !important;
+	border-bottom-right-radius: var(--slp-r-br, 0) !important;
+	border-bottom-left-radius: var(--slp-r-bl, 0) !important;
+}

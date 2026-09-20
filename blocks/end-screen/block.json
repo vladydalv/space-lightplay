@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "space-lightplay/end-screen",
+	"version": "2.0.0",
+	"title": "Video end screen",
+	"category": "media",
+	"icon": "controls-repeat",
+	"description": "Content shown when the video ends: call to action, links, next video — any blocks.",
+	"textdomain": "space-lightplay",
+	"parent": [ "space-lightplay/video" ],
+	"attributes": {
+		"showReplay": { "type": "boolean", "default": true },
+		"replayLabel": { "type": "string", "default": "" }
+	},
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"inserter": false,
+		"color": {
+			"background": true,
+			"gradients": true,
+			"text": true,
+			"link": true,
+			"__experimentalDefaultControls": { "background": true, "text": true }
+		},
+		"spacing": { "padding": true, "blockGap": true },
+		"layout": {
+			"default": { "type": "flex", "orientation": "vertical", "justifyContent": "center", "verticalAlignment": "center" },
+			"allowSwitching": false,
+			"allowOrientation": false
+		}
+	},
+	"editorScript": "space-lightplay-editor",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,218 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "space-lightplay/video",
+	"version": "2.0.0",
+	"title": "Space Lightplay",
+	"category": "media",
+	"icon": "video-alt3",
+	"description": "Lightweight YouTube, Vimeo or self-hosted video. Nothing external loads until the visitor asks for it.",
+	"textdomain": "space-lightplay",
+	"keywords": [
+		"youtube",
+		"vimeo",
+		"video",
+		"embed",
+		"lazy",
+		"lightbox"
+	],
+	"allowedBlocks": [
+		"space-lightplay/end-screen"
+	],
+	"attributes": {
+		"source": {
+			"type": "string",
+			"enum": [
+				"youtube",
+				"vimeo",
+				"file"
+			],
+			"default": "youtube"
+		},
+		"videoUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"videoId": {
+			"type": "string",
+			"default": ""
+		},
+		"vimeoHash": {
+			"type": "string",
+			"default": ""
+		},
+		"fileId": {
+			"type": "number",
+			"default": 0
+		},
+		"fileUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"videoTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"videoRatio": {
+			"type": "string",
+			"default": ""
+		},
+		"startAt": {
+			"type": "number",
+			"default": 0
+		},
+		"endAt": {
+			"type": "number",
+			"default": 0
+		},
+		"duration": {
+			"type": "number",
+			"default": 0
+		},
+		"preview": {
+			"type": "string",
+			"default": ""
+		},
+		"previewId": {
+			"type": "number",
+			"default": 0
+		},
+		"previewAuto": {
+			"type": "boolean",
+			"default": false
+		},
+		"alt": {
+			"type": "string",
+			"default": ""
+		},
+		"priorityLoad": {
+			"type": "boolean",
+			"default": false
+		},
+		"mode": {
+			"type": "string",
+			"enum": [
+				"click",
+				"lightbox",
+				"scroll",
+				"background"
+			],
+			"default": "click"
+		},
+		"scrollSound": {
+			"type": "boolean",
+			"default": false
+		},
+		"lightboxWidth": {
+			"type": "string",
+			"default": "1200px"
+		},
+		"lightboxBackdrop": {
+			"type": "string",
+			"default": ""
+		},
+		"consent": {
+			"type": "boolean",
+			"default": false
+		},
+		"consentRemember": {
+			"type": "boolean",
+			"default": true
+		},
+		"consentText": {
+			"type": "string",
+			"default": ""
+		},
+		"btnSize": {
+			"type": "string",
+			"default": "80px"
+		},
+		"btnRadius": {
+			"type": "string",
+			"default": "50%"
+		},
+		"btnBg": {
+			"type": "string",
+			"default": ""
+		},
+		"btnBgHover": {
+			"type": "string",
+			"default": ""
+		},
+		"iconColor": {
+			"type": "string",
+			"default": ""
+		},
+		"iconColorHover": {
+			"type": "string",
+			"default": ""
+		},
+		"iconCornerRadius": {
+			"type": "number",
+			"default": 0
+		},
+		"btnBlur": {
+			"type": "number",
+			"default": 0
+		},
+		"pulse": {
+			"type": "boolean",
+			"default": false
+		},
+		"overlayColor": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayGradient": {
+			"type": "string",
+			"default": ""
+		},
+		"overlayOpacity": {
+			"type": "number",
+			"default": 30
+		},
+		"panelBg": {
+			"type": "string",
+			"default": ""
+		},
+		"panelText": {
+			"type": "string",
+			"default": ""
+		},
+		"playerBg": {
+			"type": "string",
+			"default": ""
+		},
+		"stash": {
+			"type": "object",
+			"default": {}
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": true,
+		"shadow": true,
+		"spacing": {
+			"margin": true
+		},
+		"dimensions": {
+			"aspectRatio": true,
+			"width": true
+		},
+		"__experimentalBorder": {
+			"radius": true,
+			"color": true,
+			"width": true,
+			"style": true,
+			"__experimentalDefaultControls": {
+				"radius": true
+			}
+		}
+	},
+	"editorScript": "space-lightplay-editor",
+	"editorStyle": "space-lightplay-editor-style",
+	"viewScript": "space-lightplay-view",
+	"style": "space-lightplay-style",
+	"render": "file:./render.php"
+}
