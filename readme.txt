@@ -119,6 +119,19 @@ Yes, block themes and classic themes alike. The aspect ratio, border radius and 
 
 No options, tables or transients are created. Posters copied into the Media Library stay there as regular images; only the plugin's own bookkeeping data on them is removed.
 
+== Screenshots ==
+
+1. The Space Lightplay block in the editor: a poster with a play button. Set the video, its accessible title and an optional start and end time.
+2. Poster stored in your Media Library, playback options (lightbox, autoplay when in view), end screen and the optional consent notice.
+3. Colours from your theme palette: button and icon with Default and Hover values, plus a hover overlay with its own opacity.
+4. Native dimension and border controls: margin, width, aspect ratio and radius.
+5. Play button design: size, radius, icon roundness, background blur and a pulse on hover.
+6. Space Lightplay Background: a YouTube, Vimeo or self-hosted video behind any blocks.
+7. Background playback and privacy: poster only on phones and an optional consent notice.
+8. Overlay colour and opacity keep text on top of the video readable.
+9. Content layout for the background block: justification, padding, margin and block spacing.
+10. Width, aspect ratio and border radius for the background block.
+
 == Upgrade Notice ==
 
 = 2.0.0 =
